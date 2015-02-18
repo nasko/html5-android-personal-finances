@@ -74,6 +74,14 @@
                     "payee": trPayee, 
                     "note": trNote
                 };
+                if(false === appTransactions.hasOwnProperty(trYear)) {
+                    appTransactions[trYear] = {};
+                }
+
+                if(false === appTransactions[trYear].hasOwnProperty(trMonth)) {
+                    appTransactions[trYear][trMonth] = [];
+                }
+
                 appTransactions[trYear][trMonth].push(transaction);
                 sessionStorage.setItem( 'sessionTransactions', JSON.stringify(appTransactions) );
                 // console.log(transaction);
