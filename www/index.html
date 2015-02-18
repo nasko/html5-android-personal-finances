@@ -10,16 +10,24 @@
     <body>
         <div class="app">
             <h1>Лични финанси</h1>
+<<<<<<< HEAD
             <input type="button" onclick="alert('Hello World!')" value="Добавяне на приход">
             <input type="button" onclick="alert('Hello World!')" value="Отбелязване на разход">
             <input type="button" onclick="alert('Hello World!')" value="Баланса за месец">
             <input type="button" onclick="alert('Hello World!')" value="Среден разход на ден ">
+=======
+>>>>>>> upstream/master
         </div>
         <script type="text/javascript">
             if(typeof(Storage) !== "undefined") {
                 sessionStorage.setItem( 'transactions', JSON.stringify(transactions) );
             }
-//            console.log(transactions["2015"]["1"][0]);
+<<<<<<< HEAD
+
+=======
+            var tr = JSON.parse(sessionStorage.getItem('transactions'));
+            console.log(moment(tr[2015][1][0].date).format("YYYY-MM-DD Z"));
+>>>>>>> upstream/master
         </script>
     </body>
 </html>
