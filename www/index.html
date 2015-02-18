@@ -9,6 +9,7 @@
 
         <script type="text/javascript" src="js/moment-with-locales.min.js"></script>
         <script type="text/javascript" src="js/fixtures.js"></script>
+        <script type="text/javascript" src="js/handlers.js"></script>
         <script type="text/javascript" src="js/cross-browser-event-handling.js"></script>
     </head>
     <body>
@@ -57,37 +58,7 @@
                 appTransactions = JSON.parse(sessionStorage.getItem('sessionTransactions')) || fixtureTransactions;
             }
 
-            addEvent(document.getElementById('newTransactionForm'), 'submit', function(ev) {
-                var trType = document.getElementById('transactionType').value;
-                var trDate = moment(document.getElementById('transactionDate').value, "YYYY-MM-DD");
-                var trMonth = trDate.month();
-                var trYear = trDate.year();
-
-                var trAmountAbsolute = Math.abs(document.getElementById('transactionAmount').value);
-                var trPayee = document.getElementById('transactionPayee').value;
-                var trNote = document.getElementById('transactionNote').value;
-
-                var transaction = {
-                    "date": trDate, 
-                    "type": trType, 
-                    "amount": ('deposit' === trType ? 1 : -1) * trAmountAbsolute, 
-                    "payee": trPayee, 
-                    "note": trNote
-                };
-                if(false === appTransactions.hasOwnProperty(trYear)) {
-                    appTransactions[trYear] = {};
-                }
-
-                if(false === appTransactions[trYear].hasOwnProperty(trMonth)) {
-                    appTransactions[trYear][trMonth] = [];
-                }
-
-                appTransactions[trYear][trMonth].push(transaction);
-                sessionStorage.setItem( 'sessionTransactions', JSON.stringify(appTransactions) );
-                // console.log(transaction);
-                console.log(JSON.parse(sessionStorage.getItem('sessionTransactions')));
-                return false;
-            });
+            addEvent(document.getElementById('newTransactionForm'), 'submit', newTransactionSubmitted);
         </script>
     </body>
 </html>
