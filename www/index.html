@@ -4,19 +4,82 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <title>Лични финанси</title>
+
+        <link href="css/main.css" media="screen" rel="stylesheet" type="text/css">
+
         <script type="text/javascript" src="js/moment-with-locales.min.js"></script>
         <script type="text/javascript" src="js/fixtures.js"></script>
+        <script type="text/javascript" src="js/cross-browser-event-handling.js"></script>
     </head>
     <body>
         <div class="app">
             <h1>Лични финанси</h1>
+
+            <form id="newTransactionForm" action="#" method="get">
+                <div class="forminput">
+                    <label for="transactionDate">Дата</label><br>
+                    <input type="date" name="transactionDate" id="transactionDate" required="required">
+                </div>
+
+                <div class="forminput">
+                    <label for="transactionDate">Тип</label><br>
+                    <select name="transactionType" id="transactionType" required="required">
+                        <option value="" disabled selected>-- Изберете --</option>
+                        <option value="withdrawal">Разход</option>
+                        <option value="deposit">Приход</option>
+                    </select>
+                </div>
+
+                <div class="forminput">
+                    <label for="transactionAmount">Сума</label><br>
+                    <input type="number" step="0.01" name="transactionAmount" id="transactionAmount" required="required">
+                </div>
+
+                <div class="forminput">
+                    <label for="transactionPayee">Контрагент</label><br>
+                    <input type="text" name="transactionPayee" id="transactionPayee" required="required">
+                </div>
+
+                <div class="forminput">
+                    <label for="transactionNote">Бележка</label><br>
+                    <input type="text" name="transactionNote" id="transactionNote" required="required">
+                </div>
+
+                <div class="forminput">
+                    <input type="submit" name="newTransaction" id="submitNewTransaction" form="newTransactionForm" value="Добави транзакция">
+                </div>
+            </form>
         </div>
         <script type="text/javascript">
+            var appTransactions = {};
+
             if(typeof(Storage) !== "undefined") {
-                sessionStorage.setItem( 'transactions', JSON.stringify(transactions) );
+                appTransactions = JSON.parse(sessionStorage.getItem('sessionTransactions')) || fixtureTransactions;
             }
-            var tr = JSON.parse(sessionStorage.getItem('transactions'));
-            console.log(moment(tr[2015][1][0].date).format("YYYY-MM-DD Z"));
+
+            addEvent(document.getElementById('newTransactionForm'), 'submit', function(ev) {
+                var trType = document.getElementById('transactionType').value;
+                var trDate = moment(document.getElementById('transactionDate').value, "YYYY-MM-DD");
+                var trMonth = trDate.month();
+                var trYear = trDate.year();
+
+                var trAmountAbsolute = Math.abs(document.getElementById('transactionAmount').value);
+                var trPayee = document.getElementById('transactionPayee').value;
+                var trNote = document.getElementById('transactionNote').value;
+
+                var transaction = {
+                    "date": trDate, 
+                    "type": trType, 
+                    "amount": ('deposit' === trType ? 1 : -1) * trAmountAbsolute, 
+                    "payee": trPayee, 
+                    "note": trNote
+                };
+                appTransactions[trYear][trMonth].push(transaction);
+                sessionStorage.setItem( 'sessionTransactions', JSON.stringify(appTransactions) );
+                // console.log(transaction);
+                console.log(JSON.parse(sessionStorage.getItem('sessionTransactions')));
+                return false;
+            });
         </script>
     </body>
 </html>
