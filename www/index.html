@@ -15,7 +15,8 @@
             if(typeof(Storage) !== "undefined") {
                 sessionStorage.setItem( 'transactions', JSON.stringify(transactions) );
             }
-//            console.log(transactions["2015"]["1"][0]);
+            var tr = JSON.parse(sessionStorage.getItem('transactions'));
+            console.log(moment(tr[2015][1][0].date).format("YYYY-MM-DD Z"));
         </script>
     </body>
 </html>
