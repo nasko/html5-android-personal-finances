@@ -11,6 +11,14 @@
         <script type="text/javascript" src="js/fixtures.js"></script>
         <script type="text/javascript" src="js/handlers.js"></script>
         <script type="text/javascript" src="js/cross-browser-event-handling.js"></script>
+
+        <script type="text/javascript">
+            var appTransactions = {};
+            var distinctMonths = [];
+            var querySubmitActor = null;
+
+            addEvent(window, 'load', initApp);
+        </script>
     </head>
     <body>
         <div class="app">
@@ -63,16 +71,14 @@
                         <option value="" disabled selected>-- Изберете месец --</option>
                     </select>
                 </div>
+                <div class="forminput">
+                    <input type="submit" name="queryAverageExpenditure" id="queryAverageExpenditure" value="Среден разход">&nbsp;
+                    <input type="submit" name="queryMonthlyBalance" id="queryMonthlyBalance" value="Месечен баланс">
+
+                </div>
 
             </form>
 
         </div>
-        <script type="text/javascript">
-            var appTransactions = {};
-            var distinctMonths = [];
-
-            addEvent(document.getElementById('newTransactionForm'), 'submit', newTransactionSubmitted);
-            addEvent(window, 'load', initTransactions);
-        </script>
-    </body>
+   </body>
 </html>
