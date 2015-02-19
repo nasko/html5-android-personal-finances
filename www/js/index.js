@@ -63,6 +63,7 @@ function populateQuerySelectOptions() {
     for (var i = 0,op = i+1; i < distinctMonths.length; i++,op++){
         monthSelect[op] = new Option(distinctMonths[i],distinctMonths[i],false,false);
     }
+    showTransactionsTable();
     return true;
 }
 
@@ -89,7 +90,12 @@ function queryMonthlyBalance() {
 
     console.log("Month: " + monthSelected);
     console.log("Monthly balance: " + monthlyBalance.toFixed(2));
-
+    
+    var tableHTML = "<table border=\"1\"><tr><th> Month </th><th> Monthly balance </th></tr>";
+    tableHTML += "<tr><td>" + monthSelected + "</td><td>" + monthlyBalance + "</td></tr>";
+    var tableDiv = document.getElementById('showAveregeOrBalnce');
+    tableDiv.innerHTML = tableHTML;
+    
     return monthlyBalance.toFixed(2);
 }
 
@@ -120,6 +126,39 @@ function queryAverageExpenditure() {
     console.log("Month: " + monthSelected);
     console.log("Days in month: " + dInMonth);
     console.log("Average expenditure: " + avgExp);
+    
+    var tableHTML = "<table border=\"1\"><tr><th> Total expenditure: </th><th> Month </th><th> Days in month: </th><th> Average expenditure: </th></tr>";
+    tableHTML += "<tr><td>" + totalExpenditure + "</td><td>" + monthSelected + "</td><td>" + dInMonth + "</td><td>" + avgExp + "</td></tr>";
+    var tableDiv = document.getElementById('showAveregeOrBalnce');
+    tableDiv.innerHTML = tableHTML;
+    
     return avgExp;
 }
->>>>>>> upstream/master
+
+function showTransactionsTable() {
+    var tableHTML = "<p>Транзакции:</p><table border=\"1\" style=\"width:100%\"><tr><th> Date </th><th> Type </th><th> Amount </th><th> Payee </th><th> Note </th></tr>";
+    
+    var parts = distinctMonths[0].split('/');
+    var year = parts[0];
+    // months are zero-based
+    var month = parts[1]-1;
+    var transactions = appTransactions[year][month];
+    for (i in distinctMonths){
+        parts = distinctMonths[i].split('/');
+        year = parts[0];
+        // months are zero-based
+        month = parts[1]-1;
+        transactions = appTransactions[year][month];
+        for(var j = 0; j<transactions.length; j++){
+            tableHTML += '<tr><td>' + transactions[j].date._i + '</td>';
+            tableHTML += '<td>' + transactions[j].type + '</td>';
+            tableHTML += '<td>' + transactions[j].amount + '</td>';
+            tableHTML += '<td>' + transactions[j].payee + '</td>';
+            tableHTML += '<td>' + transactions[j].note + '</td></tr>';
+        }
+    }
+    
+    var tableDiv = document.getElementById('showTransactionsTable');
+    tableDiv.innerHTML = tableHTML;
+    
+}

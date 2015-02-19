@@ -45,6 +45,8 @@ function newQuerySubmitted(e) {
     return false;
 }
 
+
+
 function initApp() {
     if(typeof(Storage) !== "undefined") {
         // global vars
@@ -52,7 +54,6 @@ function initApp() {
     }
 
     populateQuerySelectOptions();
-
 
     addEvent(document.getElementById('queryAverageExpenditure'), 'click', queryButtonClicked);
     addEvent(document.getElementById('queryMonthlyBalance'), 'click', queryButtonClicked);
@@ -67,5 +68,4 @@ function queryButtonClicked(e) {
     querySubmitActor = e.target || e.srcElement;
     return true;
 }
-
 
