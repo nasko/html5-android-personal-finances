@@ -9,11 +9,22 @@
 
         <script type="text/javascript" src="js/moment-with-locales.min.js"></script>
         <script type="text/javascript" src="js/fixtures.js"></script>
-        <script type="text/javascript" src="js/cross-browser-event-handling.js"></script>
+        <script type="text/javascript" src="js/handlers.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+
+        <script type="text/javascript">
+            var appTransactions = {};
+            var distinctMonths = [];
+            var querySubmitActor = null;
+
+            addEvent(window, 'load', initApp);
+        </script>
     </head>
     <body>
         <div class="app">
             <h1>Лични финанси</h1>
+
+            <h2>Добавяне на транзакция</h2>
 
             <form id="newTransactionForm" action="#" method="get">
                 <div class="forminput">
@@ -49,37 +60,23 @@
                     <input type="submit" name="newTransaction" id="submitNewTransaction" form="newTransactionForm" value="Добави транзакция">
                 </div>
             </form>
+
+            <h2>Справки</h2>
+
+            <form id="queryTransactionsForm" action="#" method="get">
+
+                <div class="forminput">
+                    <label for="distinctMonthsSelect">Справка за месец</label><br>
+                    <select name="distinctMonthsSelect" id="distinctMonthsSelect" required="required"></select>
+                </div>
+                <div class="forminput">
+                    <input type="submit" name="queryAverageExpenditure" id="queryAverageExpenditure" value="Среден разход">&nbsp;
+                    <input type="submit" name="queryMonthlyBalance" id="queryMonthlyBalance" value="Месечен баланс">
+
+                </div>
+
+            </form>
+
         </div>
-        <script type="text/javascript">
-            var appTransactions = {};
-
-            if(typeof(Storage) !== "undefined") {
-                appTransactions = JSON.parse(sessionStorage.getItem('sessionTransactions')) || fixtureTransactions;
-            }
-
-            addEvent(document.getElementById('newTransactionForm'), 'submit', function(ev) {
-                var trType = document.getElementById('transactionType').value;
-                var trDate = moment(document.getElementById('transactionDate').value, "YYYY-MM-DD");
-                var trMonth = trDate.month();
-                var trYear = trDate.year();
-
-                var trAmountAbsolute = Math.abs(document.getElementById('transactionAmount').value);
-                var trPayee = document.getElementById('transactionPayee').value;
-                var trNote = document.getElementById('transactionNote').value;
-
-                var transaction = {
-                    "date": trDate, 
-                    "type": trType, 
-                    "amount": ('deposit' === trType ? 1 : -1) * trAmountAbsolute, 
-                    "payee": trPayee, 
-                    "note": trNote
-                };
-                appTransactions[trYear][trMonth].push(transaction);
-                sessionStorage.setItem( 'sessionTransactions', JSON.stringify(appTransactions) );
-                // console.log(transaction);
-                console.log(JSON.parse(sessionStorage.getItem('sessionTransactions')));
-                return false;
-            });
-        </script>
-    </body>
+   </body>
 </html>
