@@ -28,6 +28,11 @@ function newTransactionSubmitted() {
         sessionStorage.setItem('sessionTransactions', JSON.stringify(appTransactions));
         console.log(JSON.parse(sessionStorage.getItem('sessionTransactions')));
     }
+
+    // populate the select with distinct months in case we just added a new distinct monnth to the
+    // dictionary
+    populateQuerySelectOptions();
+
     // console.log(transaction);
     return false;
 }
@@ -59,21 +64,32 @@ function getDistinctMonths(transactions) {
     return dMonths;
 }
 
+function populateQuerySelectOptions() {
+    // global
+    distinctMonths = getDistinctMonths(appTransactions);
+
+    var monthSelect = document.getElementById("distinctMonthsSelect");
+    // purge existing options
+    monthSelect.length = 0;
+
+    // populate the select with distinct months that actually have transactions
+    monthSelect[0] = new Option('-- Изберете месец --','',false,true);
+    monthSelect[0].disabled = true;
+
+    for (var i = 0,op = i+1; i < distinctMonths.length; i++,op++){
+        monthSelect[op] = new Option(distinctMonths[i],distinctMonths[i],false,false);
+    }
+    return true;
+}
+
 function initApp() {
     if(typeof(Storage) !== "undefined") {
         // global vars
         appTransactions = JSON.parse(sessionStorage.getItem('sessionTransactions')) || fixtureTransactions;
     }
 
-    // global
-    distinctMonths = getDistinctMonths(appTransactions);
+    populateQuerySelectOptions();
 
-    var monthSelect = document.getElementById("distinctMonthsSelect");
-
-    // populate the select with distinct months that actually have transactions
-    for (var i = 0,op = i+1; i < distinctMonths.length; i++,op++){
-        monthSelect[op] = new Option(distinctMonths[i],distinctMonths[i],false,false)
-    }
 
     addEvent(document.getElementById('queryAverageExpenditure'), 'click', queryButtonClicked);
     addEvent(document.getElementById('queryMonthlyBalance'), 'click', queryButtonClicked);
