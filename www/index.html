@@ -16,6 +16,8 @@
         <div class="app">
             <h1>Лични финанси</h1>
 
+            <h2>Добавяне на транзакция</h2>
+
             <form id="newTransactionForm" action="#" method="get">
                 <div class="forminput">
                     <label for="transactionDate">Дата</label><br>
@@ -50,15 +52,27 @@
                     <input type="submit" name="newTransaction" id="submitNewTransaction" form="newTransactionForm" value="Добави транзакция">
                 </div>
             </form>
+
+            <h2>Справки</h2>
+
+            <form id="queryTransactionsForm" action="#" method="get">
+
+                <div class="forminput">
+                    <label for="distinctMonthsSelect">Справка за месец</label><br>
+                    <select name="distinctMonthsSelect" id="distinctMonthsSelect" required="required">
+                        <option value="" disabled selected>-- Изберете месец --</option>
+                    </select>
+                </div>
+
+            </form>
+
         </div>
         <script type="text/javascript">
             var appTransactions = {};
-
-            if(typeof(Storage) !== "undefined") {
-                appTransactions = JSON.parse(sessionStorage.getItem('sessionTransactions')) || fixtureTransactions;
-            }
+            var distinctMonths = [];
 
             addEvent(document.getElementById('newTransactionForm'), 'submit', newTransactionSubmitted);
+            addEvent(window, 'load', initTransactions);
         </script>
     </body>
 </html>
